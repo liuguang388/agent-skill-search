@@ -88,6 +88,8 @@
   .btn:hover { background: #2a3140; border-color: var(--accent); }
   .btn.primary { background: #1a5d2a; border-color: #2ea043; color: #7ee787; }
   .btn.primary:hover { background: #1f6b32; }
+  .btn.download-btn { background: #1a3a5c; border-color: #1f6feb; color: #79c0ff; }
+  .btn.download-btn:hover { background: #1f4468; }
   .btn.warn { background: #5d2a1a; border-color: #a03e2e; color: #e7877e; font-size: 0.75rem; }
   .pagination { display: flex; justify-content: center; gap: 8px; padding: 20px; align-items: center; }
   .pagination button {
@@ -362,7 +364,8 @@ function renderResults() {
         <div class="description">${highlight(r.d || '（无描述）', currentQuery)}</div>
         <div class="actions" onclick="event.stopPropagation()">
           <button class="btn primary" onclick="copyInstall('${esc(r.i)}', this)">&#128203; 复制安装命令</button>
-          <a class="btn" href="${esc(r.u)}" target="_blank" rel="noopener noreferrer" title="在 ClawHub 查看（新标签页打开）">&#128279; ClawHub</a>
+          <a class="btn" href="${esc(r.u)}" target="_blank" rel="noopener noreferrer" title="在 ClawHub 查看详情并下载（新标签页打开）">&#128279; ClawHub</a>
+          <a class="btn download-btn" href="https://clawhub.ai/api/v1/download?slug=${esc(r.s)}" target="_blank" rel="noopener noreferrer" title="直接下载技能 ZIP 包">&#128230; 下载</a>
         </div>
       </div>
     `).join('');
