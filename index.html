@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Skill Search - 全网技能搜索引擎</title>
+<meta name="description" content="全网 Agent 技能搜索引擎 — 搜索 5147+ 个 Agent Skills，按功能查找，一键安装">
+<meta name="keywords" content="Agent技能,OpenClaw,ClawHub,技能搜索,AI工具,自动化,编程工具,浏览器插件">
+<title>Agent Skill Search — 全网技能搜索引擎</title>
 <style>
   :root {
     --bg: #0d1117; --bg-card: #161b22; --bg-hover: #1c2129; --border: #30363d;
@@ -14,7 +16,8 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+      'Microsoft YaHei', 'Hiragino Sans GB', system-ui, sans-serif;
     background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
   }
   .hero {
@@ -27,7 +30,8 @@
     background: linear-gradient(135deg, #58a6ff, #a371f7);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .hero p { color: var(--text-dim); font-size: 1.05rem; }
+  .hero .subtitle { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 4px; }
+  .hero .hint { color: #484f58; font-size: 0.85rem; }
   .search-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; position: relative; }
   .search-box {
     display: flex; gap: 8px; background: var(--bg-card); border: 1px solid var(--border);
@@ -54,7 +58,8 @@
   }
   .filter-chip:hover { border-color: var(--accent); color: var(--text); }
   .filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .stats-bar { max-width: 720px; margin: 12px auto 0; padding: 0 20px; font-size: 0.85rem; color: var(--text-dim); display: flex; justify-content: space-between; }
+  .stats-bar { max-width: 720px; margin: 12px auto 0; padding: 0 20px; font-size: 0.85rem; color: var(--text-dim); display: flex; justify-content: space-between; align-items: center; }
+  .stats-bar .sort-select { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; }
   .results { max-width: 760px; margin: 20px auto; padding: 0 20px; display: grid; gap: 12px; }
   .result-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
@@ -76,7 +81,8 @@
   .btn:hover { background: #2a3140; border-color: var(--accent); }
   .btn.primary { background: #1a5d2a; border-color: #2ea043; color: #7ee787; }
   .btn.primary:hover { background: #1f6b32; }
-  .pagination { display: flex; justify-content: center; gap: 8px; padding: 20px; }
+  .btn.warn { background: #5d2a1a; border-color: #a03e2e; color: #e7877e; font-size: 0.75rem; }
+  .pagination { display: flex; justify-content: center; gap: 8px; padding: 20px; align-items: center; }
   .pagination button {
     padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border);
     background: var(--bg-card); color: var(--text); cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
@@ -99,30 +105,43 @@
   .modal-body { padding: 20px 24px; }
   .modal-body .field { margin-bottom: 16px; }
   .modal-body .field label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .modal-body .field p { margin: 0; }
   .modal-body pre { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-size: 0.82rem; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a5d2a; color: #7ee787; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; z-index: 300; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; }
   .loading { text-align: center; padding: 40px; color: var(--text-dim); }
-  @media (max-width: 600px) { .hero h1 { font-size: 1.6rem; } }
+  .footer { text-align: center; padding: 40px 20px; color: #484f58; font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer a { color: var(--text-dim); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+  @media (max-width: 600px) { .hero h1 { font-size: 1.6rem; } .search-box { flex-direction: column; } }
 </style>
 </head>
 <body>
 <div class="hero">
   <h1>&#129438; Agent Skill Search</h1>
-  <p>搜索 5,147+ 个 Agent 技能，按功能查找，一键下载</p>
+  <p class="subtitle">全网技能搜索引擎 — 搜索 5,147+ 个 Agent 技能，按功能查找，一键安装</p>
+  <p class="hint">数据来源：ClawHub &amp; awesome-openclaw-skills | 每天自动更新</p>
 </div>
 <div class="search-wrap">
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="输入功能关键词，如：网页搜索、PDF处理、自动化部署..." autofocus>
+    <input type="text" id="searchInput" placeholder="输入功能关键词搜索，如：爬虫、PDF处理、自动化部署、网页搜索、AI生成..." autofocus>
     <button id="searchBtn">&#128269; 搜索</button>
   </div>
 </div>
 <div class="filters" id="filters"></div>
-<div class="stats-bar" id="statsBar" style="display:none"><span id="resultCount"></span></div>
+<div class="stats-bar" id="statsBar" style="display:none">
+  <span id="resultCount"></span>
+  <select class="sort-select" id="sortSelect" onchange="doSearch()">
+    <option value="relevance">按相关度排序</option>
+    <option value="name">按名称排序</option>
+    <option value="category">按分类排序</option>
+  </select>
+</div>
 <div class="results" id="results">
-  <div class="empty"><div class="icon">&#128270;</div><p>输入关键词开始搜索 Agent Skills</p><p style="font-size:0.85rem;margin-top:8px">试试搜索: browser, PDF, deploy, notification, 爬虫...</p></div>
+  <div class="empty"><div class="icon">&#128270;</div><p>输入关键词开始搜索 Agent 技能</p><p style="font-size:0.85rem;margin-top:8px">试试搜索：爬虫、PDF、部署、通知、微信、浏览器自动化...</p></div>
 </div>
 <div class="pagination" id="pagination" style="display:none"></div>
+
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header"><h2 id="modalTitle"></h2><button class="modal-close" onclick="closeModal()">&#10005;</button></div>
@@ -131,116 +150,179 @@
 </div>
 <div class="toast" id="toast"></div>
 
+<div class="footer">
+  <p>Powered by <a href="https://github.com/VoltAgent/awesome-openclaw-skills" target="_blank">awesome-openclaw-skills</a>
+  &middot; <a href="https://clawhub.ai" target="_blank">ClawHub</a>
+  &middot; <a href="https://github.com/liuguang388/agent-skill-search" target="_blank">GitHub</a></p>
+</div>
+
 <script>
-// ===== CONFIG =====
-const CATEGORIES = [{"name": "Coding Agents & IDEs", "count": 1162}, {"name": "Web & Frontend Development", "count": 902}, {"name": "DevOps & Cloud", "count": 375}, {"name": "Search & Research", "count": 340}, {"name": "Browser & Automation", "count": 309}, {"name": "Productivity & Tasks", "count": 202}, {"name": "CLI Utilities", "count": 169}, {"name": "Image & Video Generation", "count": 166}, {"name": "AI & LLMs", "count": 159}, {"name": "Git & GitHub", "count": 155}, {"name": "Communication", "count": 142}, {"name": "Transportation", "count": 107}, {"name": "PDF & Documents", "count": 103}, {"name": "Marketing & Sales", "count": 97}, {"name": "Media & Streaming", "count": 84}, {"name": "Health & Fitness", "count": 82}, {"name": "Notes & PKM", "count": 68}, {"name": "Calendar & Scheduling", "count": 64}, {"name": "Security & Passwords", "count": 50}, {"name": "Personal Development", "count": 48}, {"name": "Shopping & E-commerce", "count": 45}, {"name": "Apple Apps & Services", "count": 43}, {"name": "Speech & Transcription", "count": 43}, {"name": "Smart Home & IoT", "count": 40}, {"name": "Data & Analytics", "count": 36}, {"name": "Moltbook", "count": 35}, {"name": "Clawdbot Tools", "count": 34}, {"name": "Self-Hosted & Automation", "count": 32}, {"name": "iOS & macOS Development", "count": 29}, {"name": "Gaming", "count": 26}];
+// ===== 配置 =====
+const CATEGORIES = [{"name": "Coding Agents & IDEs", "cn": "编程智能体 & IDE", "count": 1162}, {"name": "Web & Frontend Development", "cn": "Web 前端开发", "count": 902}, {"name": "DevOps & Cloud", "cn": "DevOps & 云服务", "count": 375}, {"name": "Search & Research", "cn": "搜索 & 研究", "count": 340}, {"name": "Browser & Automation", "cn": "浏览器 & 自动化", "count": 309}, {"name": "Productivity & Tasks", "cn": "效率 & 任务管理", "count": 202}, {"name": "CLI Utilities", "cn": "命令行工具", "count": 169}, {"name": "Image & Video Generation", "cn": "图片 & 视频生成", "count": 166}, {"name": "AI & LLMs", "cn": "AI & 大语言模型", "count": 159}, {"name": "Git & GitHub", "cn": "Git & GitHub", "count": 155}, {"name": "Communication", "cn": "通讯 & 消息", "count": 142}, {"name": "Transportation", "cn": "交通出行", "count": 107}, {"name": "PDF & Documents", "cn": "PDF & 文档处理", "count": 103}, {"name": "Marketing & Sales", "cn": "营销 & 销售", "count": 97}, {"name": "Media & Streaming", "cn": "媒体 & 流媒体", "count": 84}, {"name": "Health & Fitness", "cn": "健康 & 健身", "count": 82}, {"name": "Notes & PKM", "cn": "笔记 & 知识管理", "count": 68}, {"name": "Calendar & Scheduling", "cn": "日历 & 日程", "count": 64}, {"name": "Security & Passwords", "cn": "安全 & 密码", "count": 50}, {"name": "Personal Development", "cn": "个人成长", "count": 48}, {"name": "Shopping & E-commerce", "cn": "购物 & 电商", "count": 45}, {"name": "Apple Apps & Services", "cn": "Apple 应用 & 服务", "count": 43}, {"name": "Speech & Transcription", "cn": "Speech & Transcription", "count": 43}, {"name": "Smart Home & IoT", "cn": "Smart Home & IoT", "count": 40}, {"name": "Data & Analytics", "cn": "Data & Analytics", "count": 36}, {"name": "Moltbook", "cn": "Moltbook", "count": 35}, {"name": "Clawdbot Tools", "cn": "Clawdbot Tools", "count": 34}, {"name": "Self-Hosted & Automation", "cn": "Self-Hosted & Automation", "count": 32}, {"name": "iOS & macOS Development", "cn": "iOS & macOS Development", "count": 29}, {"name": "Gaming", "cn": "Gaming", "count": 26}];
+const CN_KEYWORD_MAP = {"编程": "coding", "代码": "code", "开发": "development", "调试": "debug", "编译器": "compiler", "解释器": "interpreter", "框架": "framework", "库": "library", "包管理": "package manager", "IDE": "ide editor", "编辑器": "editor", "重构": "refactor", "测试": "test testing", "单元测试": "unit test", "集成": "integration", "部署": "deploy deployment", "发布": "release publish", "版本": "version", "网页": "web", "前端": "frontend", "后端": "backend", "全栈": "fullstack", "HTML": "html", "CSS": "css", "JavaScript": "javascript js", "React": "react", "Vue": "vue", "Angular": "angular", "Next.js": "nextjs next.js", "Nuxt": "nuxt", "API": "api rest graphql", "路由": "router routing", "组件": "component ui", "样式": "style css", "响应式": "responsive", "静态站点": "static site generator", "云": "cloud", "服务器": "server", "容器": "container docker", "Docker": "docker", "Kubernetes": "kubernetes k8s", "CI/CD": "ci cd pipeline", "流水线": "pipeline", "监控": "monitor monitoring", "日志": "log logging", "报警": "alert alerting", "AWS": "aws", "Azure": "azure", "GCP": "gcp google cloud", "阿里云": "alicloud alibaba", "数据库": "database db sql", "MySQL": "mysql", "PostgreSQL": "postgresql postgres", "MongoDB": "mongodb mongo", "Redis": "redis", "缓存": "cache caching", "备份": "backup", "迁移": "migration migrate", "域名": "domain dns", "SSL": "ssl tls https", "Nginx": "nginx", "代理": "proxy", "负载均衡": "load balancer", "搜索": "search", "搜索引擎": "search engine", "爬虫": "crawler scrape scraping spider", "数据采集": "scrape scraping data collection", "研究": "research", "分析": "analysis analytics", "数据": "data", "情报": "intelligence", "趋势": "trend trending", "新闻": "news", "论文": "paper academic", "文献": "literature reference", "知识图谱": "knowledge graph ontology", "检索": "retrieval", "浏览器": "browser", "自动化": "automation", "Chrome": "chrome", "Edge": "edge", "Firefox": "firefox", "截图": "screenshot", "填表": "form fill", "点击": "click", "滚动": "scroll", "脚本": "script", "工作流": "workflow", "定时": "schedule cron", "效率": "productivity", "任务": "task todo", "待办": "todo task", "提醒": "reminder", "笔记": "note notes", "知识管理": "pkm knowledge", "日历": "calendar", "日程": "schedule scheduling", "会议": "meeting", "邮件": "email smtp", "消息": "message messaging", "通知": "notify notification", "文件": "file", "文件夹": "folder", "重命名": "rename", "批量": "batch bulk", "模板": "template", "快捷键": "shortcut hotkey", "剪贴板": "clipboard", "截图工具": "screenshot capture", "计时器": "timer pomodoro", "图片": "image picture photo", "视频": "video", "音频": "audio", "生成": "generate generation", "AI生成": "ai generate", "Stable Diffusion": "stable diffusion sd", "Midjourney": "midjourney", "DALL-E": "dalle", "编辑": "edit editing", "转换": "convert conversion", "压缩": "compress compression", "裁剪": "crop", "滤镜": "filter", "水印": "watermark", "OCR": "ocr", "识别": "recognition recognize", "字幕": "subtitle caption", "语音": "speech voice tts", "文字转语音": "tts text to speech", "语音转文字": "stt speech to text transcription", "大模型": "llm large language model", "AI": "ai artificial intelligence", "ChatGPT": "chatgpt gpt", "Claude": "claude anthropic", "Gemini": "gemini", "Llama": "llama", "OpenAI": "openai", "提示词": "prompt", "向量": "vector embedding", "RAG": "rag retrieval", "Agent": "agent", "对话": "chat conversation", "微调": "finetune fine-tune", "训练": "train training", "代码仓库": "repository repo", "提交": "commit", "分支": "branch", "合并": "merge", "PR": "pull request", "Issue": "issue", "GitHub": "github", "GitLab": "gitlab", "Gitee": "gitee", "代码审查": "code review", "通讯": "communication message", "飞书": "feishu lark", "微信": "wechat weixin", "企业微信": "wecom wechat work", "钉钉": "dingtalk ding", "Discord": "discord", "Slack": "slack", "Telegram": "telegram", "WhatsApp": "whatsapp", "短信": "sms", "电话": "phone call", "PDF": "pdf", "文档": "document", "Word": "word docx", "Excel": "excel xlsx csv", "PPT": "powerpoint ppt pptx", "表格": "spreadsheet table", "Markdown": "markdown md", "导出": "export", "导入": "import", "合并PDF": "merge pdf", "拆分PDF": "split pdf", "签名": "signature sign", "安全": "security", "密码": "password", "加密": "encrypt encryption", "解密": "decrypt", "认证": "auth authentication", "授权": "authorization oauth", "漏洞": "vulnerability", "扫描": "scan scanner", "防火墙": "firewall", "VPN": "vpn", "SSH": "ssh", "密钥": "key secret token", "金融": "finance financial", "加密货币": "crypto cryptocurrency", "比特币": "bitcoin btc", "以太坊": "ethereum eth", "股票": "stock", "交易": "trading trade", "钱包": "wallet", "区块链": "blockchain", "汇率": "exchange rate currency", "支付": "payment pay", "购物": "shopping ecommerce", "淘宝": "taobao", "京东": "jd jingdong", "拼多多": "pinduoduo", "抖音": "douyin tiktok", "价格": "price", "优惠": "coupon discount", "比价": "compare price", "健康": "health", "健身": "fitness workout", "运动": "exercise sport", "跑步": "running run", "睡眠": "sleep", "饮食": "diet nutrition food", "冥想": "meditation", "心率": "heart rate", "音乐": "music", "视频播放": "video player playback", "流媒体": "streaming", "下载": "download", "Youtube": "youtube", "B站": "bilibili", "Spotify": "spotify", "Netflix": "netflix", "播客": "podcast", "设计": "design", "UI": "ui user interface", "UX": "ux user experience", "原型": "prototype wireframe", "Figma": "figma", "Sketch": "sketch", "图标": "icon", "配色": "color palette theme", "字体": "font typography", "动画": "animation motion", "SVG": "svg", "Canvas": "canvas", "工具": "tool utility", "命令行": "cli command line terminal", "Shell": "shell bash zsh", "插件": "plugin extension addon", "主题": "theme", "配置": "config configuration", "安装": "install setup", "更新": "update upgrade", "卸载": "uninstall remove", "中文": "chinese", "翻译": "translation translate", "天气": "weather", "地图": "map location geo", "导航": "navigation gps", "快递": "delivery tracking logistics", "物联网": "iot hardware", "智能家居": "smart home", "RSS": "rss feed", "书签": "bookmark", "阅读": "reading read", "打印": "print", "二维码": "qr code", "短链接": "short url link", "验证码": "captcha", "上传": "upload"};
 const PER_PAGE = 20;
 let searchData = [];
 let currentQuery = '';
 let currentCategory = '';
 let currentPage = 0;
 
-// ===== INIT =====
+// ===== 初始化 =====
 (async function() {
-  // Load search index
-  document.getElementById('results').innerHTML = '<div class="loading">&#9203; 加载搜索索引中...</div>';
+  document.getElementById('results').innerHTML = '<div class="loading">&#9203; 正在加载搜索索引（5,147+ 技能）...</div>';
   try {
     const resp = await fetch('search_index.json');
-    if (!resp.ok) throw new Error('Index not found');
+    if (!resp.ok) throw new Error('索引文件未找到（HTTP ' + resp.status + '）');
     searchData = await resp.json();
-    document.getElementById('results').innerHTML = '<div class="empty"><div class="icon">&#128270;</div><p>输入关键词开始搜索 5,147+ 个 Agent Skills</p><p style="font-size:0.85rem;margin-top:8px">试试搜索: browser, PDF, deploy, notification, 爬虫...</p></div>';
+    document.getElementById('results').innerHTML = '<div class="empty"><div class="icon">&#128270;</div><p>输入关键词开始搜索 5,147+ 个 Agent 技能</p><p style="font-size:0.85rem;margin-top:8px">支持中英文搜索，试试：爬虫、PDF、部署、微信、浏览器...</p></div>';
   } catch(e) {
-    document.getElementById('results').innerHTML = '<div class="empty"><p>&#9888;&#65039; 无法加载搜索索引: ' + e.message + '</p></div>';
+    document.getElementById('results').innerHTML = '<div class="empty"><p>&#9888;&#65039; 搜索索引加载失败：' + e.message + '</p><p style="font-size:0.85rem;margin-top:8px">请刷新页面重试，或检查网络连接</p></div>';
   }
 
-  // Render category filters
+  // 渲染分类筛选器（显示中文名）
   const fc = document.getElementById('filters');
   CATEGORIES.forEach(c => {
     const chip = document.createElement('span');
     chip.className = 'filter-chip';
-    chip.textContent = c.name + ' (' + c.count + ')';
+    chip.textContent = c.cn + ' (' + c.count + ')';
+    chip.title = c.name;  // 英文原名作为 tooltip
     chip.onclick = () => toggleCategory(c.name, chip);
     fc.appendChild(chip);
   });
+  // "全部" 按钮
+  const allChip = document.createElement('span');
+  allChip.className = 'filter-chip active';
+  allChip.textContent = '全部 (' + searchData.length + ')';
+  allChip.onclick = () => { currentCategory = ''; currentPage = 0; document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active')); allChip.classList.add('active'); renderResults(); };
+  fc.insertBefore(allChip, fc.firstChild);
 
-  // Bind events
+  // 事件绑定
   document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
   document.getElementById('searchBtn').addEventListener('click', doSearch);
   document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 })();
 
-// ===== SEARCH =====
+// ===== 中文关键词翻译 =====
+function translateChineseQuery(query) {
+  // 对于每个中文词，查找映射表并添加对应的英文词
+  const words = query.split(/\s+/);
+  const expanded = [];
+  for (const w of words) {
+    expanded.push(w);
+    // 检查是否完全匹配中文关键词
+    if (CN_KEYWORD_MAP[w]) {
+      expanded.push(CN_KEYWORD_MAP[w]);
+    } else {
+      // 检查部分匹配（较长的中文词可能包含中文关键词）
+      for (const [cn, en] of Object.entries(CN_KEYWORD_MAP)) {
+        if (w.includes(cn) && cn.length >= 2) {
+          expanded.push(en);
+        }
+      }
+    }
+  }
+  return expanded.join(' ').toLowerCase();
+}
+
+// ===== 搜索 =====
 function doSearch() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const q = document.getElementById('searchInput').value.trim();
   currentQuery = q;
   currentPage = 0;
   renderResults();
 }
 
 function toggleCategory(name, chip) {
-  if (currentCategory === name) { currentCategory = ''; chip.classList.remove('active'); }
-  else {
+  const allChip = document.getElementById('filters').firstChild;
+  if (currentCategory === name) {
+    currentCategory = '';
+    chip.classList.remove('active');
+    allChip.classList.add('active');
+  } else {
     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    currentCategory = name; chip.classList.add('active');
+    currentCategory = name;
+    chip.classList.add('active');
   }
   currentPage = 0;
   renderResults();
 }
 
 function search(query, category) {
-  const words = query.split(/\s+/).filter(Boolean);
   let results = searchData;
 
-  // Category filter
+  // 分类筛选
   if (category) {
     results = results.filter(s => s.c === category);
   }
 
-  if (words.length === 0) return results;
+  if (!query || query.trim() === '') return results;
 
-  // Score each skill
+  // 扩展查询：中文词 → 英文词
+  const expandedQuery = translateChineseQuery(query);
+  const words = expandedQuery.split(/\s+/).filter(Boolean);
+
+  // 评分
   const scored = results.map(s => {
     let score = 0;
-    const text = s.t;
+    const text = s.t || '';
+    const name = (s.n || '').toLowerCase();
+    const desc = (s.d || '').toLowerCase();
+    const cat = (s.c || '').toLowerCase();
+    const cnCat = (s.cc || '').toLowerCase();
+    const cnKw = (s.ck || '').toLowerCase();
+
     for (const w of words) {
-      // Exact name match
-      if (s.n.toLowerCase() === w) score += 100;
-      // Name starts with
-      else if (s.n.toLowerCase().startsWith(w)) score += 50;
-      // Name contains
-      else if (s.n.toLowerCase().includes(w)) score += 30;
-      // Description contains
-      if (s.d.toLowerCase().includes(w)) score += 10;
-      // Category match
-      if (s.c.toLowerCase().includes(w)) score += 5;
-      // Full text contains
-      const idx = text.indexOf(w);
-      if (idx >= 0) score += 1;
+      const lw = w.toLowerCase();
+      // 完全匹配名称
+      if (name === lw) score += 100;
+      // 名称前缀匹配
+      else if (name.startsWith(lw)) score += 50;
+      // 名称包含
+      else if (name.includes(lw)) score += 30;
+      // 描述包含
+      if (desc.includes(lw)) score += 10;
+      // 英文分类匹配
+      if (cat.includes(lw)) score += 7;
+      // 中文分类匹配
+      if (cnCat.includes(lw)) score += 7;
+      // 中文关键词匹配
+      if (cnKw.includes(lw)) score += 7;
+      // 全文字段匹配（兜底）
+      if (text.indexOf(lw) >= 0) score += 1;
     }
     return { ...s, score };
   });
 
-  // Filter and sort
-  if (words.length > 0) {
-    scored = scored.filter(s => s.score > 0);
-  }
+  // 过滤零分结果
   scored.sort((a, b) => b.score - a.score);
+
+  // 排序选项
+  const sortBy = document.getElementById('sortSelect').value;
+  if (sortBy === 'name') {
+    scored.sort((a, b) => a.n.localeCompare(b.n));
+  } else if (sortBy === 'category') {
+    scored.sort((a, b) => a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
+  }
+
   return scored;
 }
 
 function highlight(text, query) {
   if (!query) return esc(text);
-  const words = query.split(/\s+/).filter(Boolean);
+  const expandedQuery = translateChineseQuery(query);
+  const words = expandedQuery.split(/\s+/).filter(Boolean);
   let result = esc(text);
   for (const w of words) {
-    const re = new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-    result = result.replace(re, '<em>$1</em>');
+    if (w.length < 2) continue; // 跳过单字高亮，减少噪音
+    try {
+      const re = new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      result = result.replace(re, '<em>$1</em>');
+    } catch(e) { /* 忽略无效正则 */ }
   }
   return result;
 }
 
-// ===== RENDER =====
+// ===== 渲染 =====
 function renderResults() {
   const resultsDiv = document.getElementById('results');
   const statsBar = document.getElementById('statsBar');
@@ -251,39 +333,41 @@ function renderResults() {
   const start = currentPage * PER_PAGE;
   const pageItems = filtered.slice(start, start + PER_PAGE);
 
-  // Stats
+  // 状态栏
   statsBar.style.display = 'flex';
+  const queryDisplay = currentQuery ? '「' + esc(currentQuery) + '」' : '';
   document.getElementById('resultCount').textContent =
-    '找到 ' + total.toLocaleString() + ' 个技能' +
-    (total > 0 ? '（显示 ' + (start + 1) + '-' + Math.min(start + PER_PAGE, total) + '）' : '');
+    '找到 ' + total.toLocaleString() + ' 个技能' + queryDisplay +
+    (total > 0 ? '（显示第 ' + (start + 1) + '-' + Math.min(start + PER_PAGE, total) + ' 个）' : '');
 
-  // Results
+  // 结果列表
   if (pageItems.length === 0) {
-    resultsDiv.innerHTML = '<div class="empty"><div class="icon">&#129335;</div><p>没有找到匹配的技能</p><p style="font-size:0.85rem">试试换个关键词</p></div>';
+    resultsDiv.innerHTML = '<div class="empty"><div class="icon">&#129335;</div><p>没有找到匹配的技能</p><p style="font-size:0.85rem;margin-top:8px">试试换个关键词，或使用英文搜索</p></div>';
   } else {
     resultsDiv.innerHTML = pageItems.map(r => `
       <div class="result-card" onclick="showDetail('${esc(r.s)}')">
         <div class="header">
           <span class="name">${highlight(r.n, currentQuery)}</span>
-          <span class="category-tag">${esc(r.c)}</span>
-          ${r.o ? '<span class="owner">by ' + esc(r.o) + '</span>' : ''}
+          <span class="category-tag" title="${esc(r.c)}">${esc(r.cc)}</span>
+          ${r.o ? '<span class="owner">作者：' + esc(r.o) + '</span>' : ''}
         </div>
-        <div class="description">${highlight(r.d || '', currentQuery)}</div>
+        <div class="description">${highlight(r.d || '（无描述）', currentQuery)}</div>
         <div class="actions" onclick="event.stopPropagation()">
           <button class="btn primary" onclick="copyInstall('${esc(r.i)}', this)">&#128203; 复制安装命令</button>
-          <a class="btn" href="${esc(r.u)}" target="_blank" rel="noopener">&#128279; ClawHub</a>
+          <a class="btn" href="${esc(r.u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="在 ClawHub 查看详情">&#128279; ClawHub 详情</a>
+          <span class="btn warn" style="cursor:default;font-size:0.7rem" title="点击卡片查看详情">&#128712; 点击卡片看详情</span>
         </div>
       </div>
     `).join('');
   }
 
-  // Pagination
+  // 分页
   const totalPages = Math.ceil(total / PER_PAGE);
   if (totalPages > 1) {
     paginationDiv.style.display = 'flex';
     paginationDiv.innerHTML = `
       <button ${currentPage === 0 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})">&#8592; 上一页</button>
-      <span class="current">${currentPage + 1} / ${totalPages}</span>
+      <span class="current">第 ${currentPage + 1} / ${totalPages} 页</span>
       <button ${currentPage + 1 >= totalPages ? 'disabled' : ''} onclick="goPage(${currentPage + 1})">下一页 &#8594;</button>
     `;
   } else {
@@ -302,13 +386,16 @@ function showDetail(slug) {
   if (!skill) return;
   document.getElementById('modalTitle').textContent = skill.n;
   document.getElementById('modalBody').innerHTML = `
-    <div class="field"><label>描述</label><p>${esc(skill.d || '无描述')}</p></div>
-    <div class="field"><label>分类</label><p>${esc(skill.c)}</p></div>
-    ${skill.o ? '<div class="field"><label>发布者</label><p>' + esc(skill.o) + '</p></div>' : ''}
-    <div class="field"><label>安装命令</label><pre><code>${esc(skill.i)}</code></pre></div>
+    <div class="field"><label>&#128220; 描述</label><p>${esc(skill.d || '暂无描述')}</p></div>
+    <div class="field"><label>&#128451; 分类</label><p>${esc(skill.cc)}（${esc(skill.c)}）${skill.ck ? '<br><small style=\'color:var(--text-dim)\'>关键词：' + esc(skill.ck) + '</small>' : ''}</p></div>
+    ${skill.o ? '<div class="field"><label>&#128100; 发布者</label><p>' + esc(skill.o) + '</p></div>' : ''}
+    <div class="field"><label>&#128187; 安装命令</label><pre><code>${esc(skill.i)}</code></pre></div>
     <div class="field">
       <button class="btn primary" onclick="copyInstall('${esc(skill.i)}', this)">&#128203; 复制安装命令</button>
       <a class="btn" href="${esc(skill.u)}" target="_blank" style="margin-left:8px">&#128279; 在 ClawHub 查看</a>
+    </div>
+    <div class="field" style="margin-top:12px;padding:8px;background:var(--bg);border-radius:6px;font-size:0.75rem;color:var(--text-dim)">
+      &#8505;&#65039; 提示：如果 ClawHub 链接无法打开，请直接使用安装命令在本地安装。
     </div>
   `;
   document.getElementById('modalOverlay').classList.add('active');
@@ -320,18 +407,24 @@ function copyInstall(cmd, btn) {
   const ta = document.createElement('textarea');
   ta.innerHTML = cmd;
   navigator.clipboard.writeText(ta.value).then(() => {
-    btn.classList.add('copied'); btn.textContent = '&#9989; 已复制!';
-    showToast('安装命令已复制到剪贴板');
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '&#128203; 复制安装命令'; }, 2000);
+    btn.classList.add('copied');
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '&#9989; 已复制！';
+    showToast('&#9989; 安装命令已复制到剪贴板');
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHTML; }, 2000);
+  }).catch(() => {
+    showToast('&#9888;&#65039; 复制失败，请手动选择复制');
   });
 }
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
-  toast.textContent = msg; toast.classList.add('show');
+  toast.innerHTML = msg;
+  toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
+// HTML 转义
 function esc(s) {
   if (!s) return '';
   const div = document.createElement('div');
