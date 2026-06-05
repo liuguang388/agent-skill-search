@@ -364,8 +364,7 @@ function renderResults() {
         <div class="description">${highlight(r.d || '（无描述）', currentQuery)}</div>
         <div class="actions" onclick="event.stopPropagation()">
           <button class="btn primary" onclick="copyInstall('${esc(r.i)}', this)">&#128203; 复制安装命令</button>
-          <a class="btn" href="${esc(r.u)}" target="_blank" rel="noopener noreferrer" title="在 ClawHub 查看详情并下载（新标签页打开）">&#128279; ClawHub</a>
-          <a class="btn download-btn" href="https://clawhub.ai/api/v1/download?slug=${esc(r.s)}" target="_blank" rel="noopener noreferrer" title="直接下载技能 ZIP 包">&#128230; 下载</a>
+          <a class="btn download-btn" href="${esc(r.u)}" target="_blank" rel="noopener noreferrer" title="在 ClawHub 查看并下载技能（新标签页打开）">&#128230; ClawHub 下载</a>
         </div>
       </div>
     `).join('');
@@ -402,7 +401,7 @@ function showDetail(slug) {
     <div class="field"><label>&#128187; 安装命令</label><pre><code>${esc(skill.i)}</code></pre></div>
     <div class="field">
       <button class="btn primary" onclick="copyInstall('${esc(skill.i)}', this)">&#128203; 复制安装命令</button>
-      <a class="btn" href="${esc(skill.u)}" target="_blank" style="margin-left:8px">&#128279; 在 ClawHub 查看</a>
+      <a class="btn download-btn" href="${esc(skill.u)}" target="_blank" style="margin-left:8px">&#128230; 在 ClawHub 查看/下载</a>
     </div>
     <div class="field" style="margin-top:12px;padding:8px;background:var(--bg);border-radius:6px;font-size:0.75rem;color:var(--text-dim)">
       &#8505;&#65039; 提示：如果 ClawHub 链接无法打开，请直接使用安装命令在本地安装。
